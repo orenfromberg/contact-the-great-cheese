@@ -8,6 +8,9 @@ import logo from './cheese.png';
 import './App.css';
 import ContactPage from './Components/ContactPage';
 import ThanksPage from './Components/ThanksPage';
+import 'whatwg-fetch';
+
+const URL = "https://a910slh7gc.execute-api.us-east-1.amazonaws.com/production/contact-us";
 
 class App extends Component {
   constructor(props) {
@@ -20,9 +23,21 @@ class App extends Component {
   }
 
   submit(values) {
-    console.log(values)
-    this.setState({
-      done: true
+    return fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    })
+    .then((response) => {
+      // const data = response.json()
+      this.setState({
+        done: true
+      })
+    })
+    .catch(() => {
+      console.error('an error has occurred')
     })
   }
 
@@ -33,9 +48,6 @@ class App extends Component {
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Contact The Great Cheese</h1>
-            <p className="App-intro">
-              Please send us a message and we'll get back to you as soon as possible.
-            </p>
           </header>
         </div>
       <Router>
